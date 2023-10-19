@@ -3,42 +3,39 @@ from tensorflow import keras
 from keras.preprocessing.image import ImageDataGenerator
 
 # Rutas de las carpetas test, train y valid
-train_dir = 'train\images' 
-valid_dir = 'valid\images'
-test_dir = 'test\images'
+train_dir = 'train' 
+valid_dir = 'valid'
+test_dir = 'test'
+
+# Creacion de las clases 
+class_names = ['weapon', 'knife']
 
 # Definir la normalización de los datos
-train_dir = ImageDataGenerator()
-valid_dir = ImageDataGenerator()
-test_dir = ImageDataGenerator()
-
-class_names = ['pistol', 'knife', 'free risk']
+train_data_gen = ImageDataGenerator()
+valid_data_gen = ImageDataGenerator()
+test_data_gen = ImageDataGenerator()
 
 # Generar los datos de entrenamiento
-train_generator = train_dir.flow_from_directory(
-    train_dir,  # Usa la ruta completa al directorio de entrenamiento
+train_generator = train_data_gen.flow_from_directory(
+    train_dir,
     target_size=(150, 150),
     batch_size=32,
-    class_mode='categorical',
-    # classes=class_names
+    class_mode='categorical'
 )
 
-valid_generator = valid_dir.flow_from_directory(
-    valid_dir,  # Usa la ruta completa al directorio de validación
+valid_generator = valid_data_gen.flow_from_directory(
+    valid_dir,
     target_size=(150, 150),
     batch_size=32,
-    class_mode='categorical',
-    # classes=class_names
+    class_mode='categorical'
 )
 
-test_generator = test_dir.flow_from_directory(
-    test_dir,  # Usa la ruta completa al directorio de prueba
+test_generator = test_data_gen.flow_from_directory(
+    test_dir,
     target_size=(150, 150),
     batch_size=32,
-    class_mode='categorical',
-    # classes=class_names
+    class_mode='categorical'
 )
-
 
 # Arquitectura de la CNN
 model = keras.Sequential([
@@ -56,7 +53,7 @@ model = keras.Sequential([
 
 model.compile(
     optimizer='adam',
-    loss='categorical_crossentropy',
+    loss='sparse_categorical_crossentropy',
     metrics=['accuracy']
 )
 
