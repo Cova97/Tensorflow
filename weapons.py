@@ -1,4 +1,3 @@
-import os
 import tensorflow as tf
 from tensorflow import keras
 from keras.preprocessing.image import ImageDataGenerator
@@ -8,18 +7,15 @@ train_dir = 'train\images'
 valid_dir = 'valid\images'
 test_dir = 'test\images'
 
-# Abrir las carpetas con os
-train = os.listdir(train_dir)
-valid = os.listdir(valid_dir)
-test = os.listdir(test_dir)
-
 # Definir la normalización de los datos
-datagen = ImageDataGenerator(rescale=1.0/255)
+train_dir = ImageDataGenerator()
+valid_dir = ImageDataGenerator()
+test_dir = ImageDataGenerator()
 
 class_names = ['pistol', 'knife', 'free risk']
 
 # Generar los datos de entrenamiento
-train_generator = datagen.flow_from_directory(
+train_generator = train_dir.flow_from_directory(
     train_dir,  # Usa la ruta completa al directorio de entrenamiento
     target_size=(150, 150),
     batch_size=32,
@@ -27,7 +23,7 @@ train_generator = datagen.flow_from_directory(
     # classes=class_names
 )
 
-valid_generator = datagen.flow_from_directory(
+valid_generator = valid_dir.flow_from_directory(
     valid_dir,  # Usa la ruta completa al directorio de validación
     target_size=(150, 150),
     batch_size=32,
@@ -35,7 +31,7 @@ valid_generator = datagen.flow_from_directory(
     # classes=class_names
 )
 
-test_generator = datagen.flow_from_directory(
+test_generator = test_dir.flow_from_directory(
     test_dir,  # Usa la ruta completa al directorio de prueba
     target_size=(150, 150),
     batch_size=32,
