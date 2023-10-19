@@ -20,21 +20,21 @@ train_generator = train_data_gen.flow_from_directory(
     train_dir,
     target_size=(150, 150),
     batch_size=32,
-    class_mode='categorical'
+    class_mode='sparse'
 )
 
 valid_generator = valid_data_gen.flow_from_directory(
     valid_dir,
     target_size=(150, 150),
     batch_size=32,
-    class_mode='categorical'
+    class_mode='sparse'
 )
 
 test_generator = test_data_gen.flow_from_directory(
     test_dir,
     target_size=(150, 150),
     batch_size=32,
-    class_mode='categorical'
+    class_mode='sparse'
 )
 
 # Arquitectura de la CNN
