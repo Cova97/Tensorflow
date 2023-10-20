@@ -11,9 +11,18 @@ test_dir = 'test'
 class_names = ['weapon', 'knife']
 
 # Definir la normalización de los datos
-train_data_gen = ImageDataGenerator()
-valid_data_gen = ImageDataGenerator()
-test_data_gen = ImageDataGenerator()
+train_data_gen = ImageDataGenerator(
+    rotation_range=90,  # Rango de rotación aleatoria de hasta 90 grados
+    horizontal_flip=True  # Reflejo horizontal aleatorio
+)
+valid_data_gen = ImageDataGenerator(
+    rotation_range=90,  # Rango de rotación aleatoria de hasta 90 grados
+    horizontal_flip=True  # Reflejo horizontal aleatorio
+)
+test_data_gen = ImageDataGenerator(
+    rotation_range=90,  # Rango de rotación aleatoria de hasta 90 grados
+    horizontal_flip=True  # Reflejo horizontal aleatorio
+)
 
 # Generar los datos de entrenamiento
 train_generator = train_data_gen.flow_from_directory(
@@ -58,7 +67,10 @@ model.compile(
 )
 
 # Entrenar el modelo con los generadores
-history_model = model.fit(train_generator, validation_data=valid_generator, epochs=20)
+history_model = model.fit(train_generator, validation_data=valid_generator, epochs=100)
+
+# Guardar el modelo
+model.save('CNN_Modelo.h5')
 
 test_loss, test_accuracy = model.evaluate(test_generator)
 print(f'Accuracy: {test_accuracy}')
