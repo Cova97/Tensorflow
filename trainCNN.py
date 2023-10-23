@@ -9,7 +9,7 @@ valid_dir = 'valid'
 test_dir = 'test'
 
 # Creacion de las clases 
-class_names = ['weapon', 'knife']
+class_names = ['knife', 'no_risk','weapon']
 
 # Definir la normalización de los datos
 train_data_gen = ImageDataGenerator(

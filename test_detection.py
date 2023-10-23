@@ -36,7 +36,7 @@ while cap.isOpened():
 
     # Interpretar las predicciones
     class_index = np.argmax(predictions)
-    class_labels = ['Weapon', 'Knife']
+    class_labels = ['knife', 'no_risk','weapon']
     class_label = f"Clase predicha: {class_labels[class_index]}"
 
     # Dibujar el cuadro de texto en el fotograma
