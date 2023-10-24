@@ -2,7 +2,6 @@ import tensorflow as tf
 from tensorflow import keras
 from keras.preprocessing.image import ImageDataGenerator
 
-
 # Rutas de las carpetas test, train y valid
 train_dir = 'train' 
 valid_dir = 'valid'
@@ -30,21 +29,21 @@ train_generator = train_data_gen.flow_from_directory(
     train_dir,
     target_size=(150, 150),
     batch_size=32,
-    class_mode='sparse'
+    class_mode='categorical'
 )
 
 valid_generator = valid_data_gen.flow_from_directory(
     valid_dir,
     target_size=(150, 150),
     batch_size=32,
-    class_mode='sparse'
+    class_mode='categorical'
 )
 
 test_generator = test_data_gen.flow_from_directory(
     test_dir,
     target_size=(150, 150),
     batch_size=32,
-    class_mode='sparse'
+    class_mode='categorical'
 )
 
 # Arquitectura de la CNN
@@ -63,12 +62,12 @@ model = keras.Sequential([
 
 model.compile(
     optimizer='adam',
-    loss='sparse_categorical_crossentropy',
+    loss='categorical_crossentropy',
     metrics=['accuracy']
 )
 
 # Entrenar el modelo con los generadores
-history_model = model.fit(train_generator, validation_data=valid_generator, epochs=100)
+history_model = model.fit(train_generator, validation_data=valid_generator, epochs=5)
 
 # Guardar el modelo
 model.save('CNN_Modelo.h5')

@@ -4,7 +4,6 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.layers import GlobalAveragePooling2D, Dense
 from keras.models import Model
 
-
 # Rutas de las carpetas test, train y valid
 train_dir = 'train' 
 valid_dir = 'valid'
