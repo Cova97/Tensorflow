@@ -4,7 +4,7 @@ import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 
 # Cargar el modelo entrenado
-model = tf.keras.models.load_model('CNN_Modelo.h5')
+model = tf.keras.models.load_model('CNN_Modelo (1).h5')
 
 # Abrir el archivo .mp4
 video_path = 'Arma.mp4'
