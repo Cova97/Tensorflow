@@ -1,8 +1,18 @@
+import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-from keras.preprocessing.image import ImageDataGenerator
-from keras.layers import GlobalAveragePooling2D, Dense
 from keras.models import Model
+import matplotlib.pyplot as plt
+from keras.layers import GlobalAveragePooling2D, Dense
+from keras.preprocessing.image import ImageDataGenerator
+from sklearn.metrics import confusion_matrix, classification_report, roc_curve, auc
+
+def build_model(bottom_model, classes):
+    model = bottom_model.layers[-2].output
+    model = GlobalAveragePooling2D()(model)
+    model = Dense(classes, activation='softmax', name="Capa_Salida")(model)
+
+    return model
 
 # Rutas de las carpetas test, train y valid
 train_dir = 'train' 
@@ -56,18 +66,10 @@ vgg = tf.keras.applications.VGG16(input_shape=(150,150,3),include_top=False,weig
 
 vgg.summary()
 
-def build_model(bottom_model, classes):
-    model = bottom_model.layers[-2].output
-    model = GlobalAveragePooling2D()(model)
-    model = Dense(classes, activation='softmax', name="Capa_Salida")(model)
-
-    return model
-
-head = build_model(vgg, 2)
+head = build_model(vgg, 3)
 
 model = Model(inputs= vgg.input, outputs = head)
 model.summary()
-
 
 model.compile(
     optimizer='adam',
@@ -78,7 +80,7 @@ model.compile(
 # Entrenar el modelo con los generadores
 history_model = model.fit(train_generator, 
                           validation_data=valid_generator, 
-                          epochs=50, 
+                          epochs=1, 
                           steps_per_epoch=train_generator.n//BATCH_SIZE,
                           validation_steps=valid_generator.n//BATCH_SIZE)
 
@@ -87,3 +89,47 @@ model.save('CNN_Modelo-VGG16.h5')
 
 test_loss, test_accuracy = model.evaluate(test_generator)
 print(f'Accuracy: {test_accuracy}')
+
+# Obtener las predicciones del modelo en el conjunto de datos de prueba
+predictions = model.predict(test_generator)
+predicted_classes = np.argmax(predictions, axis=1)
+
+# Obtener las etiquetas reales del conjunto de datos de prueba
+true_classes = test_generator.classes
+
+# Calcular la matriz de confusión
+confusion_matrix = confusion_matrix(true_classes, predicted_classes)
+
+# Imprimir la matriz de confusión
+print("Confusion Matrix")
+print(confusion_matrix)
+
+# Obtener un informe de clasificación
+print(classification_report(true_classes, predicted_classes, target_names=class_names))
+
+# Obtener las probabilidades de predicción del modelo
+predicted_probabilities = model.predict(test_generator)
+
+# Calcular la curva ROC para cada clase
+fpr = dict()
+tpr = dict()
+roc_auc = dict()
+
+for i in range(len(class_names)):
+    fpr[i], tpr[i], _ = roc_curve(test_generator.classes == i, predicted_probabilities[:, i])
+    roc_auc[i] = auc(fpr[i], tpr[i])
+
+# Dibuja las curvas ROC para cada clase
+plt.figure(figsize=(8, 6))
+
+for i in range(len(class_names)):
+    plt.plot(fpr[i], tpr[i], lw=2, label=f'ROC curve (area = {roc_auc[i]:.2f}) for {class_names[i]}')
+
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC)')
+plt.legend(loc="lower right")
+plt.show()
