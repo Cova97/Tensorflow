@@ -1,17 +1,17 @@
 import numpy as np
 import tensorflow as tf
-from tensorflow import keras
 import matplotlib.pyplot as plt
+from tensorflow import keras
 from keras.preprocessing.image import ImageDataGenerator
 from sklearn.metrics import confusion_matrix, classification_report, roc_curve, auc
 
 # Rutas de las carpetas test, train y valid
-train_dir = 'train' 
+train_dir = 'train'
 valid_dir = 'valid'
 test_dir = 'test'
 
-# Creacion de las clases 
-class_names = ['knife', 'no_risk','weapon']
+# Creación de las clases
+class_names = ['knife', 'no_risk', 'weapon']
 
 # Definir la normalización de los datos
 train_data_gen = ImageDataGenerator(
@@ -60,7 +60,7 @@ model = keras.Sequential([
     keras.layers.Flatten(),
     keras.layers.Dense(512, activation='relu'),
     keras.layers.Dropout(0.5),
-    keras.layers.Dense(len(class_names), activation='softmax')
+    keras.layers.Dense(3, activation='softmax')  
 ])
 
 model.compile(
@@ -85,14 +85,14 @@ predicted_classes = np.argmax(predictions, axis=1)
 # Obtener las etiquetas reales del conjunto de datos de prueba
 true_classes = test_generator.classes
 
-# Calcular la matriz de confusion
+# Calcular la matriz de confusión
 confusion_matrix = confusion_matrix(true_classes, predicted_classes)
 
-# Imprimir la matriz de confusion
+# Imprimir la matriz de confusión
 print("Confusion Matrix")
 print(confusion_matrix)
 
-# Obtener un informe de clasificacion
+# Obtener un informe de clasificación
 print(classification_report(true_classes, predicted_classes, target_names=class_names))
 
 # Obtener las probabilidades de predicción del modelo
@@ -107,7 +107,7 @@ for i in range(len(class_names)):
     fpr[i], tpr[i], _ = roc_curve(test_generator.classes == i, predicted_probabilities[:, i])
     roc_auc[i] = auc(fpr[i], tpr[i])
 
-# Dibuja las curvas ROC para cada clase
+# Dibujar las curvas ROC para cada clase
 plt.figure(figsize=(8, 6))
 
 for i in range(len(class_names)):

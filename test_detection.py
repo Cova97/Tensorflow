@@ -4,7 +4,7 @@ import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 
 # Cargar el modelo entrenado
-model = tf.keras.models.load_model('CNN_Modelo (1).h5')
+model = tf.keras.models.load_model('CNN_Modelo-VGG19.h5')
 
 # Abrir el archivo .mp4
 video_path = 'Arma.mp4'
@@ -26,7 +26,7 @@ while cap.isOpened():
         break
 
     # Redimensionar el fotograma a 150x150 píxeles
-    frame = cv2.resize(frame, (150, 150))
+    frame = cv2.resize(frame, (250, 250))
 
     # Normalizar la imagen
     frame = data_gen.standardize(np.array([frame]))
