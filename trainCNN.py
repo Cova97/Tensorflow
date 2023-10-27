@@ -74,10 +74,10 @@ model.compile(
 )
 
 # Entrenar el modelo con los generadores
-history_model = model.fit(train_generator, validation_data=valid_generator, epochs=30)
+history_model = model.fit(train_generator, validation_data=valid_generator, epochs=10)
 
 # Guardar el modelo
-model.save('Entrenamientos/CNN_Modelo8.h5')
+model.save(f'Entrenamientos/CNN_Modelo8.h5')
 
 test_loss, test_accuracy = model.evaluate(test_generator)
 print(f'Accuracy: {test_accuracy}')
@@ -114,6 +114,8 @@ for i in range(len(class_names)):
 # Dibujar las curvas ROC para cada clase
 plt.figure(figsize=(8, 6))
 
+resultados_dir = 'Resultados'  # Ruta de la carpeta de resultados
+
 for i in range(len(class_names)):
     plt.plot(fpr[i], tpr[i], lw=2, label=f'ROC curve (area = {roc_auc[i]:.2f}) for {class_names[i]}')
 
@@ -124,4 +126,5 @@ plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.title('Receiver Operating Characteristic (ROC)')
 plt.legend(loc="lower right")
+plt.savefig(f'{resultados_dir}/roc_curve_{class_names}.png')
 plt.show()

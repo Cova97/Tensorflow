@@ -4,10 +4,10 @@ import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 
 # Cargar el modelo entrenado
-model = tf.keras.models.load_model('Entrenamientos/CNN_Modelo7.h5')
+model = tf.keras.models.load_model('Entrenamientos/CNN_Modelo8.h5')
 
 # Abrir el archivo .mp4
-video_path = 'Videos/Arma3.mp4'
+video_path = 'Videos/Arma.mp4'
 cap = cv2.VideoCapture(video_path)
 
 # Crear el generador de datos para normalización
