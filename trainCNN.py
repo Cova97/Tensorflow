@@ -6,24 +6,24 @@ from keras.preprocessing.image import ImageDataGenerator
 from sklearn.metrics import confusion_matrix, classification_report, roc_curve, auc
 
 # Rutas de las carpetas test, train y valid
-train_dir = 'train'
-valid_dir = 'valid'
-test_dir = 'test'
+train_dir = 'dataset_3/train'
+valid_dir = 'dataset_3/valid'
+test_dir = 'dataset_3/test'
 
 # Creación de las clases
-class_names = ['knife', 'no_risk', 'weapon']
+class_names = ['no_risk', 'risk']
 
 # Definir la normalización de los datos
 train_data_gen = ImageDataGenerator(
-    rotation_range=90,  # Rango de rotación aleatoria de hasta 90 grados
+    rotation_range=45,  # Rango de rotación aleatoria de hasta 45 grados
     horizontal_flip=True  # Reflejo horizontal aleatorio
 )
 valid_data_gen = ImageDataGenerator(
-    rotation_range=90,  # Rango de rotación aleatoria de hasta 90 grados
+    rotation_range=45,  # Rango de rotación aleatoria de hasta 45 grados
     horizontal_flip=True  # Reflejo horizontal aleatorio
 )
 test_data_gen = ImageDataGenerator(
-    rotation_range=90,  # Rango de rotación aleatoria de hasta 90 grados
+    rotation_range=45,  # Rango de rotación aleatoria de hasta 45 grados
     horizontal_flip=True  # Reflejo horizontal aleatorio
 )
 
@@ -51,16 +51,20 @@ test_generator = test_data_gen.flow_from_directory(
 
 # Arquitectura de la CNN
 model = keras.Sequential([
-    keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(150, 150, 3)),
+    keras.layers.Conv2D(32, (3, 3), input_shape=(150, 150, 3)),
     keras.layers.MaxPooling2D((2, 2)),
     keras.layers.Conv2D(64, (3, 3), activation='relu'),
+    keras.layers.MaxPooling2D((2, 2)),
+    keras.layers.Conv2D(128, (3, 3), activation='relu'),
+    keras.layers.MaxPooling2D((2, 2)),
+    keras.layers.Conv2D(256, (3, 3), activation='relu'),
     keras.layers.MaxPooling2D((2, 2)),
     keras.layers.Conv2D(128, (3, 3), activation='relu'),
     keras.layers.MaxPooling2D((2, 2)),
     keras.layers.Flatten(),
     keras.layers.Dense(512, activation='relu'),
     keras.layers.Dropout(0.5),
-    keras.layers.Dense(3, activation='softmax')  
+    keras.layers.Dense(len(class_names), activation='softmax')  
 ])
 
 model.compile(
@@ -70,10 +74,10 @@ model.compile(
 )
 
 # Entrenar el modelo con los generadores
-history_model = model.fit(train_generator, validation_data=valid_generator, epochs=3)
+history_model = model.fit(train_generator, validation_data=valid_generator, epochs=30)
 
 # Guardar el modelo
-model.save('CNN_Modelo.h5')
+model.save('Entrenamientos/CNN_Modelo8.h5')
 
 test_loss, test_accuracy = model.evaluate(test_generator)
 print(f'Accuracy: {test_accuracy}')

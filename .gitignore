@@ -116,5 +116,8 @@ train
 valid
 venv
 .vscode
-Arma.mp4
-CNN_Modelo.h5
+Entrenamientos
+Videos
+dataset_1
+dataset_2
+dataset_3

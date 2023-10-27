@@ -4,10 +4,10 @@ import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 
 # Cargar el modelo entrenado
-model = tf.keras.models.load_model('CNN_Modelo-VGG19.h5')
+model = tf.keras.models.load_model('Entrenamientos/CNN_Modelo7.h5')
 
 # Abrir el archivo .mp4
-video_path = 'Arma.mp4'
+video_path = 'Videos/Arma3.mp4'
 cap = cv2.VideoCapture(video_path)
 
 # Crear el generador de datos para normalización
@@ -26,7 +26,7 @@ while cap.isOpened():
         break
 
     # Redimensionar el fotograma a 150x150 píxeles
-    frame = cv2.resize(frame, (250, 250))
+    frame = cv2.resize(frame, (150, 150))
 
     # Normalizar la imagen
     frame = data_gen.standardize(np.array([frame]))
@@ -36,7 +36,7 @@ while cap.isOpened():
 
     # Interpretar las predicciones
     class_index = np.argmax(predictions)
-    class_labels = ['knife', 'no_risk','weapon']
+    class_labels = ['risk', 'no_risk' ]
     class_label = f"Clase predicha: {class_labels[class_index]}"
 
     # Dibujar el cuadro de texto en el fotograma
