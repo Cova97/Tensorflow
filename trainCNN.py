@@ -77,7 +77,7 @@ model.compile(
 history_model = model.fit(train_generator, validation_data=valid_generator, epochs=10)
 
 # Guardar el modelo
-model.save(f'Entrenamientos/CNN_Modelo8.h5')
+model.save(f'Entrenamientos/CNN_Modelo9.h5')
 
 test_loss, test_accuracy = model.evaluate(test_generator)
 print(f'Accuracy: {test_accuracy}')

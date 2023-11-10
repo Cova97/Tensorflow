@@ -40,7 +40,7 @@ test_data_gen = ImageDataGenerator(
 # Generar los datos de entrenamiento
 train_generator = train_data_gen.flow_from_directory(
     train_dir,
-    target_size=(250, 250),
+    target_size=(150, 150),
     batch_size=BATCH_SIZE,
     color_mode="rgb",
     class_mode='categorical', shuffle=True
@@ -48,7 +48,7 @@ train_generator = train_data_gen.flow_from_directory(
 
 valid_generator = valid_data_gen.flow_from_directory(
     valid_dir,
-    target_size=(250, 250),
+    target_size=(150, 150),
     batch_size=BATCH_SIZE,
     color_mode="rgb",
     class_mode='categorical', shuffle=True
@@ -56,13 +56,13 @@ valid_generator = valid_data_gen.flow_from_directory(
 
 test_generator = test_data_gen.flow_from_directory(
     test_dir,
-    target_size=(250, 250),
+    target_size=(150, 150),
     batch_size=BATCH_SIZE,
     color_mode="rgb",
     class_mode='categorical', shuffle=True
 )
 
-vgg = tf.keras.applications.VGG19(input_shape=(250,250,3),include_top=False,weights="imagenet")
+vgg = tf.keras.applications.VGG19(input_shape=(150,150,3),include_top=False,weights="imagenet")
 
 vgg.summary()
 
@@ -80,7 +80,7 @@ model.compile(
 # Entrenar el modelo con los generadores
 history_model = model.fit(train_generator, 
                           validation_data=valid_generator, 
-                          epochs=1, 
+                          epochs=50, 
                           steps_per_epoch=train_generator.n//BATCH_SIZE,
                           validation_steps=valid_generator.n//BATCH_SIZE)
 
