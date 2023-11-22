@@ -74,7 +74,16 @@ model.compile(
 )
 
 # Entrenar el modelo con los generadores
-history_model = model.fit(train_generator, validation_data=valid_generator, epochs=10)
+history_model = model.fit(train_generator, validation_data=valid_generator, epochs=50)
+
+test_loss, test_accuracy = model.evaluate(test_generator)
+print(f'Accuracy: {test_accuracy}')
+plt.plot(history_model.history['loss'])
+plt.plot(history_model.history['val_loss'])
+plt.title('Model Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.show()
 
 # Guardar el modelo
 model.save(f'Entrenamientos/CNN_Modelo9.h5')
