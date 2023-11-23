@@ -80,7 +80,7 @@ model.compile(
 # Entrenar el modelo con los generadores
 history_model = model.fit(train_generator, 
                           validation_data=valid_generator, 
-                          epochs=3, 
+                          epochs=50, 
                           steps_per_epoch=train_generator.n//BATCH_SIZE,
                           validation_steps=valid_generator.n//BATCH_SIZE)
 
