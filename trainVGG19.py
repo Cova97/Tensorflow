@@ -25,15 +25,15 @@ class_names = ['no_risk', 'risk']
 
 # Definir la normalización de los datos
 train_data_gen = ImageDataGenerator(
-    rotation_range=90,  # Rango de rotación aleatoria de hasta 90 grados
+    rotation_range=180,  # Rango de rotación aleatoria de hasta 90 grados
     horizontal_flip=True  # Reflejo horizontal aleatorio
 )
 valid_data_gen = ImageDataGenerator(
-    rotation_range=90,  # Rango de rotación aleatoria de hasta 90 grados
+    rotation_range=180,  # Rango de rotación aleatoria de hasta 90 grados
     horizontal_flip=True  # Reflejo horizontal aleatorio
 )
 test_data_gen = ImageDataGenerator(
-    rotation_range=90,  # Rango de rotación aleatoria de hasta 90 grados
+    rotation_range=180,  # Rango de rotación aleatoria de hasta 90 grados
     horizontal_flip=True  # Reflejo horizontal aleatorio
 )
 
@@ -80,13 +80,21 @@ model.compile(
 # Entrenar el modelo con los generadores
 history_model = model.fit(train_generator, 
                           validation_data=valid_generator, 
-                          epochs=50, 
+                          epochs=1, 
                           steps_per_epoch=train_generator.n//BATCH_SIZE,
                           validation_steps=valid_generator.n//BATCH_SIZE)
 
 # Graficar la precisión de entrenamiento y validación por época
 plt.plot(history_model.history['accuracy'])
 plt.plot(history_model.history['val_accuracy'])
+plt.title('Model Accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.show()
+
+# Graficar la pérdida de entrenamiento y validación por época
+plt.plot(history_model.history['loss'])
+plt.plot(history_model.history['val_loss'])
 plt.title('Model Loss')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')

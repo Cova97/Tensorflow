@@ -76,7 +76,15 @@ model.compile(
 # Entrenar el modelo con los generadores
 history_model = model.fit(train_generator, validation_data=valid_generator, epochs=50)
 
-# Graficar loss del entrenamiento y validación por época
+# Graficar la precisión de entrenamiento y validación por época
+plt.plot(history_model.history['accuracy'])
+plt.plot(history_model.history['val_accuracy'])
+plt.title('Model Accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.show()
+
+# Graficar la pérdida de entrenamiento y validación por época
 test_loss, test_accuracy = model.evaluate(test_generator)
 print(f'Accuracy: {test_accuracy}')
 plt.plot(history_model.history['loss'])

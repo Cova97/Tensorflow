@@ -15,13 +15,13 @@ def build_model(bottom_model, classes):
     return model
 
 # Rutas de las carpetas test, train y valid
-train_dir = 'train' 
-valid_dir = 'valid'
-test_dir = 'test'
+train_dir = 'dataset_3/train'
+valid_dir = 'dataset_3/valid'
+test_dir = 'dataset_3/test'
 BATCH_SIZE = 32
 
 # Creacion de las clases 
-class_names = ['knife', 'no_risk','weapon']
+class_names = ['no_risk', 'risk']
 
 # Definir la normalización de los datos
 train_data_gen = ImageDataGenerator(
@@ -66,7 +66,7 @@ vgg = tf.keras.applications.VGG16(input_shape=(150,150,3),include_top=False,weig
 
 vgg.summary()
 
-head = build_model(vgg, 3)
+head = build_model(vgg, len(class_names))
 
 model = Model(inputs= vgg.input, outputs = head)
 model.summary()
@@ -83,6 +83,22 @@ history_model = model.fit(train_generator,
                           epochs=50, 
                           steps_per_epoch=train_generator.n//BATCH_SIZE,
                           validation_steps=valid_generator.n//BATCH_SIZE)
+
+# Graficar la precisión de entrenamiento y validación por época
+plt.plot(history_model.history['accuracy'])
+plt.plot(history_model.history['val_accuracy'])
+plt.title('Precisión del modelo')
+plt.xlabel('Épocas')
+plt.ylabel('Precisión')
+plt.show()
+
+# Graficar la pérdida de entrenamiento y validación por época
+plt.plot(history_model.history['loss'])
+plt.plot(history_model.history['val_loss'])
+plt.title('Pérdida del modelo')
+plt.xlabel('Épocas')
+plt.ylabel('Pérdida')
+plt.show()
 
 # Guardar el modelo
 model.save('CNN_Modelo-VGG16.h5')
